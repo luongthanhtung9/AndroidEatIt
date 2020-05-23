@@ -1,11 +1,14 @@
 package com.example.androideatit.common;
 
+import com.example.androideatit.model.AddonModel;
 import com.example.androideatit.model.CategoryModel;
 import com.example.androideatit.model.FoodModel;
+import com.example.androideatit.model.SizeModel;
 import com.example.androideatit.model.UserModel;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.List;
 
 public class Common {
     public static final String USER_REFERENCES = "Users";
@@ -29,5 +32,26 @@ public class Common {
         }
         else
         return defaultPrice;
+    }
+
+    public static Double calculateExtraPrice(SizeModel userSelectedSize, List<AddonModel> userSelectedAddon) {
+        Double result = 0.0;
+        if(userSelectedSize == null && userSelectedAddon == null) {
+            return result;
+        } else if(userSelectedSize == null){
+            for(AddonModel addonModel : userSelectedAddon) {
+                result += addonModel.getPrice();
+            }
+            return result;
+        } else if (userSelectedAddon == null) {
+            return userSelectedSize.getPrice()*1.0;
+        } else {
+            for(AddonModel addonModel : userSelectedAddon) {
+                result += addonModel.getPrice();
+            }
+            result += userSelectedSize.getPrice()*1.0;
+            return result;
+        }
+
     }
 }
