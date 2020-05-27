@@ -26,6 +26,7 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_menu">Categories</string>
     <string name="menu_food_detail">Food Detail</string>
+    <string name="menu_cart">Cart</string>
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_food_list">Food List</string>
@@ -44,4 +45,9 @@
     <string name="add_on">Addon</string>
     <string name="search">Search</string>
     <string name="example">Example</string>
+    <string name="empty_cart">EMPTY CART</string>
+    <string name="total_0_0">Total: 0,0</string>
+    <string name="_100_0">100.0</string>
+    <string name="place_order">Place Order</string>
+    <string name="action_clear_cart">Clear Cart</string>
 </resources>

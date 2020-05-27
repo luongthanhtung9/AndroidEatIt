@@ -22,6 +22,10 @@
         <menu>
 
             <item
+                android:id="@+id/nav_cart"
+                android:icon="@drawable/ic_shopping_cart_black_24dp"
+                android:title="@string/menu_cart" />
+            <item
                 android:id="@+id/nav_food_list"
                 android:icon="@drawable/ic_menu_send"
                 android:title="@string/menu_food_list" />

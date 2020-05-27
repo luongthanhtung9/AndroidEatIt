@@ -20,6 +20,7 @@ import com.example.androideatit.database.LoadCartDataSource;
 import com.example.androideatit.eventbus.CategoryClick;
 import com.example.androideatit.eventbus.CounterCartEvent;
 import com.example.androideatit.eventbus.FoodItemClick;
+import com.example.androideatit.eventbus.HideFABCart;
 import com.google.android.material.navigation.NavigationView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -28,6 +29,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -46,6 +48,11 @@ public class HomeActivity extends AppCompatActivity {
     @BindView(R.id.fab)
     CounterFab fab;
 
+    @OnClick(R.id.fab)
+    void onFabClick() {
+        navController.navigate(R.id.nav_cart);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +69,7 @@ public class HomeActivity extends AppCompatActivity {
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_menu, R.id.nav_food_detail,
-                R.id.nav_tools, R.id.nav_food_list)
+                R.id.nav_tools, R.id.nav_food_list, R.id.nav_cart)
                 .setDrawerLayout(drawer)
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -135,6 +142,15 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onHideFABEvent(HideFABCart event) {
+        if (event.isHidden()) {
+            fab.hide();
+        } else {
+            fab.show();
+        }
+    }
+
     private void countCartItem() {
         cartDataSource.countItemInCart(Common.currentUser.getUid())
                 .subscribeOn(Schedulers.io())
@@ -152,7 +168,12 @@ public class HomeActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(HomeActivity.this, "[COUNT CART]" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        if (!e.getMessage().contains("Query returned empty")) {
+                            Toast.makeText(HomeActivity.this, "[COUNT CART]" + e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                        }
+                        else
+                            fab.setCount(0);
                     }
                 });
     }
